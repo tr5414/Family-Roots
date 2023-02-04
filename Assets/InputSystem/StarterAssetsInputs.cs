@@ -12,6 +12,8 @@ namespace StarterAssets
 		public Vector2 look;
 		public bool jump;
 		public bool sprint;
+		public bool usePrimary;
+		public bool useSecondary;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -43,6 +45,16 @@ namespace StarterAssets
 		{
 			SprintInput(value.isPressed);
 		}
+
+		public void OnUse(InputValue value)
+		{
+			UseInput(value.isPressed);
+		}
+
+		public void OnUseSecondary(InputValue value)
+		{
+			UseSecondaryInput(value.isPressed);
+		}
 #endif
 
 
@@ -65,7 +77,17 @@ namespace StarterAssets
 		{
 			sprint = newSprintState;
 		}
-		
+
+		public void UseInput(bool newUseState)
+		{
+			usePrimary = newUseState;
+		}
+
+		public void UseSecondaryInput(bool newUseState)
+		{
+			useSecondary = newUseState;
+		}
+
 		private void OnApplicationFocus(bool hasFocus)
 		{
 			SetCursorState(cursorLocked);

@@ -6,12 +6,18 @@ public class CorkboardGUI : MonoBehaviour
     [SerializeField] private StarterAssets.StarterAssetsInputs starterAssetsInputs;
     [SerializeField] private Vector3 preferredRelativeForwardVector = Vector3.forward;
 
-    public float UseTimeout = 0.35f;
+    [SerializeField] private Collider corkboardCollider;
 
-    private Collider[] corkboardColliders;
+    [SerializeField] private float raycastRange = 10f;
+
+    //public float UseTimeout = 0.35f;
+
     private HashSet<CorkboardGUIElement> elements = new HashSet<CorkboardGUIElement>();
 
     private float _useTimeoutDelta = 0f;
+
+    private bool lastUsePrimaryState = false;
+    private bool lastUseSecondaryState = false;
 
     enum BoardState
     {
@@ -31,7 +37,12 @@ public class CorkboardGUI : MonoBehaviour
             starterAssetsInputs = playerObj.GetComponent<StarterAssets.StarterAssetsInputs>();
         }
 
-        corkboardColliders = GetComponents<Collider>();
+        if (corkboardCollider == null)
+        {
+            Debug.LogWarning("Corkboard is missing collider. Searching for a replacement. This could cause issues.");
+            corkboardCollider = GetComponent<Collider>();
+        }
+
 
         CorkboardGUIElement[] elmList = GetComponentsInChildren<CorkboardGUIElement>();
         elements.UnionWith(elmList);
@@ -41,18 +52,18 @@ public class CorkboardGUI : MonoBehaviour
 
     private void AttachElementsToBoard()
     {
-        if (corkboardColliders.Length == 0)
+        if (corkboardCollider == null)
         {
-            Debug.LogError("Unable to find colliders for the corkboard. Bailing out.");
+            Debug.LogError("Unable to find corkboardCollider. Bailing out.");
             return;
         }
 
         foreach(CorkboardGUIElement elm in elements)
         {
             Vector3 attachPosition = Vector3.positiveInfinity;
-            foreach(Collider collide in corkboardColliders)
+            //foreach(Collider collide in corkboardColliders)
             {
-                Vector3 testAttachPosition = collide.ClosestPoint(elm.transform.position);
+                Vector3 testAttachPosition = corkboardCollider.ClosestPoint(elm.transform.position);
 
                 if (attachPosition.sqrMagnitude > testAttachPosition.sqrMagnitude)
                     attachPosition = testAttachPosition;
@@ -66,49 +77,74 @@ public class CorkboardGUI : MonoBehaviour
 
     void Update()
     {
-        if (starterAssetsInputs.sprint && _useTimeoutDelta <= 0f)
+        if (lastUsePrimaryState != starterAssetsInputs.usePrimary // if primary toggle
+            || lastUseSecondaryState != starterAssetsInputs.useSecondary) // if secondary toggle
         {
-            _useTimeoutDelta = UseTimeout;
+            bool usePrimary = starterAssetsInputs.usePrimary;
+            bool useSecondary = starterAssetsInputs.useSecondary;
+
             if (currentState == BoardState.Idle)
             {
-                IdleUseCheck();
+                IdleUseToggleCheck(usePrimary, useSecondary);
             }
-            else if (currentState == BoardState.MovingItem)
+
+            if (currentState == BoardState.MovingItem)
             {
-                currentState = BoardState.Idle;
-                movingItem = null;
+                MovingItemUseToggleCheck(usePrimary, useSecondary);
             }
-        }
-        else
-        {
-            _useTimeoutDelta -= Time.deltaTime;
+
+            lastUsePrimaryState = starterAssetsInputs.usePrimary;
+            lastUseSecondaryState = starterAssetsInputs.useSecondary;
         }
 
         if (currentState == BoardState.MovingItem)
         {
-            RaycastHit[] hits = Physics.RaycastAll(Camera.main.transform.position, Camera.main.transform.forward, 100.0f);
+            MovingItemUpdate();
+        }
+    }
 
-            foreach(RaycastHit hit in hits)
+    private void IdleUseToggleCheck(bool usePrimary, bool useSecondary)
+    {
+        if (!usePrimary && !useSecondary)
+        {
+            return;
+        }
+
+        if (usePrimary)
+        {
+            bool isHit = Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, raycastRange);
+            if (isHit)
             {
-                if (hit.collider.transform == transform)
+                var hitItem = hit.collider.GetComponent<CorkboardGUIElement>();
+
+                if (hitItem && elements.Contains(hitItem))
                 {
-                    Vector3 newPosition = hit.point;
-                    movingItem.transform.position = newPosition;
+                    movingItem = hitItem;
+                    currentState = BoardState.MovingItem;
                 }
             }
         }
     }
 
-    private void IdleUseCheck()
+    private void MovingItemUseToggleCheck(bool usePrimary, bool useSecondary)
     {
-        bool isHit = Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 100.0f);
-        if (isHit)
+        if (!usePrimary)
         {
-            var hitItem = hit.collider.GetComponent<CorkboardGUIElement>();
-            if (hitItem && elements.Contains(hitItem))
+            currentState = BoardState.Idle;
+            movingItem = null;
+        }
+    }
+
+    private void MovingItemUpdate()
+    {
+        RaycastHit[] hits = Physics.RaycastAll(Camera.main.transform.position, Camera.main.transform.forward, raycastRange);
+
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider == corkboardCollider)
             {
-                movingItem = hitItem;
-                currentState = BoardState.MovingItem;
+                Vector3 newPosition = hit.point;
+                movingItem.transform.position = newPosition;
             }
         }
     }
