@@ -4575,7 +4575,7 @@ PrefabInstance:
     - target: {fileID: 1357445559844659729, guid: e5f53f3e0e1518c4c9ec3be6d16f67b5,
         type: 3}
       propertyPath: m_Name
-      value: Door_05 (4)
+      value: EscapeDoor
       objectReference: {fileID: 0}
     - target: {fileID: 1357445559845092913, guid: e5f53f3e0e1518c4c9ec3be6d16f67b5,
         type: 3}
@@ -4798,6 +4798,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.9150818, y: 2.0389845, z: 0.31295723}
   m_Center: {x: 0.43028373, y: 1.0207196, z: 0.00075134076}
+--- !u!114 &753035977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753035975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7234327ec43a7b547a29aa6a722301cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HighlightMaterial: {fileID: 2100000, guid: cefbce65880da3c41bf06ac6a59cca34, type: 2}
+  OnInteract:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &754973723
 PrefabInstance:
   m_ObjectHideFlags: 0
