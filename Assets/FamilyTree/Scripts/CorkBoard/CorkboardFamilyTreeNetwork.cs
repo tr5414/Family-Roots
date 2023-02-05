@@ -222,7 +222,30 @@ public class CorkboardFamilyTreeNetwork : MonoBehaviour
         }
 
         //Do children connection judgements
-        totalChildConnections = childErrors = 0;
+        totalChildConnections = allfamilyMembers.SelectMany(mem => mem.children).Count();
+        childErrors = 0;
+
+        foreach (var famfam in allfamilyMembers)
+        {
+            CorkboardGUIPhoto parentPhoto = familyMemberPhotos.Where(photo => photo.familyMember == famfam).FirstOrDefault();
+
+            foreach (var child in famfam.children)
+            {
+                CorkboardGUIPhoto childPhoto = familyMemberPhotos.Where(photo => photo.familyMember == child).FirstOrDefault();
+                if (!parentPhoto || !childPhoto)
+                {
+                    childErrors++;
+                    continue;
+                }
+
+                bool hasChild = activeConnections.Where(conn => conn.Parents.Contains(parentPhoto))
+                    .Where(conn => conn.Children.Contains(childPhoto))
+                    .Any();
+
+                if (!hasChild)
+                    childErrors++;
+            }
+        }
 
         return (childErrors == 0) && (nameErrors == 0);
     }
