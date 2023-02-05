@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d8d3608a03c6f6f48926ea7805237dcc, type: 2}
+  - {fileID: 2100000, guid: a8d13a425392e4042b9a2128a1c53915, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -168,6 +168,7 @@ MonoBehaviour:
   pinPoint: {fileID: 1111749651215073044}
   nametagPoint: {fileID: 2689637319509167223}
   meshRenderer: {fileID: 1111749650288242731}
+  activeNameTag: {fileID: 0}
 --- !u!1 &1111749651215073047
 GameObject:
   m_ObjectHideFlags: 0

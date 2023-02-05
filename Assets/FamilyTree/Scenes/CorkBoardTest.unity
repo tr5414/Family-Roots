@@ -1480,7 +1480,10 @@ MonoBehaviour:
   prefabNameTag: {fileID: 77685205345594534, guid: aa48315c51b2e074db6ef5d3011db9ce,
     type: 3}
   familyMembers:
-  - {fileID: 11400000, guid: 2775141eb62080542b67d6d4ab25cf13, type: 2}
+  - {fileID: 11400000, guid: 8511261bb0f9dea4d9d1986a440518ae, type: 2}
+  - {fileID: 11400000, guid: 828d13af32cd9a841851a7e4b3e606c8, type: 2}
+  - {fileID: 11400000, guid: 64cd6ddf0cb588c4d9653f1eb772523d, type: 2}
+  - {fileID: 11400000, guid: 8e416af49ba54d14194260ce64d68d4b, type: 2}
 --- !u!4 &1857820673 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8718778828885884488, guid: e5f4daf24146ee040b5a2d7a73b30aa0,

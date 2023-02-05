@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0bf259021c77b8e42ae5acc1513bbd54, type: 3}
-  m_Name: BonnieJacobs
+  m_Name: ___MR_EMPTY_
   m_EditorClassIdentifier: 
-  fullName: Bonnie Jacobs
-  photo: {fileID: 2100000, guid: 61fdd993c53c62b4eb73420ba20ed2fd, type: 2}
+  fullName: 
+  photo: {fileID: 0}
   children: []
