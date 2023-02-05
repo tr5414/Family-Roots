@@ -1454,10 +1454,20 @@ MonoBehaviour:
   prefabNameTag: {fileID: 77685205345594534, guid: aa48315c51b2e074db6ef5d3011db9ce,
     type: 3}
   familyMembers:
-  - {fileID: 11400000, guid: 8511261bb0f9dea4d9d1986a440518ae, type: 2}
   - {fileID: 11400000, guid: 828d13af32cd9a841851a7e4b3e606c8, type: 2}
   - {fileID: 11400000, guid: 64cd6ddf0cb588c4d9653f1eb772523d, type: 2}
   - {fileID: 11400000, guid: 8e416af49ba54d14194260ce64d68d4b, type: 2}
+  - {fileID: 11400000, guid: 4401b664aca2ed244bb188f0e098a3a3, type: 2}
+  - {fileID: 11400000, guid: 479e1accee811d14997fb7f1132067f4, type: 2}
+  - {fileID: 11400000, guid: eba65170d34080a40978a994f4be5725, type: 2}
+  - {fileID: 11400000, guid: 8502cf68d3a86f043b581ea781bc6b2c, type: 2}
+  - {fileID: 11400000, guid: af6f0457c4026eb43a13ad786fc8102d, type: 2}
+  - {fileID: 11400000, guid: 6fb88a7907bbdfd44ab784afed0963ed, type: 2}
+  - {fileID: 11400000, guid: 7b6f90be38d246a43ac2b6b78ce2b287, type: 2}
+  - {fileID: 11400000, guid: e1813571679491d498899f407c3d7832, type: 2}
+  - {fileID: 11400000, guid: a171e86a35f28384db3471a01d6f371a, type: 2}
+  - {fileID: 11400000, guid: 0737189c25957da4192f6040e8defd86, type: 2}
+  - {fileID: 11400000, guid: b6adf7e4071b6d74c83825617375af0d, type: 2}
 --- !u!4 &1857820673 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8718778828885884488, guid: e5f4daf24146ee040b5a2d7a73b30aa0,
