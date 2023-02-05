@@ -15,7 +15,7 @@ public class ReticuleCanvas : MonoBehaviour
 
     public void SetScissorsMode(bool scissors)
     {
-        basicReticule.enabled = !scissors;
+        //basicReticule.enabled = !scissors;
         scissorsReticule.enabled = scissors;
     }
 }
