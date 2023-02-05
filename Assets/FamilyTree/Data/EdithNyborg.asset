@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bf259021c77b8e42ae5acc1513bbd54, type: 3}
+  m_Name: EdithNyborg
+  m_EditorClassIdentifier: 
+  fullName: Edith Nyborg
+  photo: {fileID: 2100000, guid: d8d3608a03c6f6f48926ea7805237dcc, type: 2}
+  children:
+  - {fileID: 11400000, guid: 8e416af49ba54d14194260ce64d68d4b, type: 2}
+  - {fileID: 11400000, guid: 7b6f90be38d246a43ac2b6b78ce2b287, type: 2}
+  - {fileID: 11400000, guid: af6f0457c4026eb43a13ad786fc8102d, type: 2}

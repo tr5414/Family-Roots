@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PuzzleBuilder : MonoBehaviour
 {
-    public CorkboardGUI corkboard;
+    private CorkboardGUI corkboard;
 
     public CorkboardGUIPhoto prefabPhoto;
     public CorkboardGUIFamilyNameTag prefabNameTag;
