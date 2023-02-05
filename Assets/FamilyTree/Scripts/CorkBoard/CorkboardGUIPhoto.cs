@@ -11,8 +11,20 @@ public class CorkboardGUIPhoto : CorkboardGUIItem
 
     public CorkboardGUIFamilyNameTag activeNameTag;
 
+    public FamilyMemberData familyMember { get; private set; }
+
     public void Setup(FamilyMemberData memberData)
     {
-        meshRenderer.material = memberData.photo;
+        if (memberData.photo == null)
+        {
+            Debug.LogErrorFormat("Missing photo material for family member: {0}", familyMember);
+        }
+        else
+        {
+            meshRenderer.material = memberData.photo;
+        }
+        
+
+        familyMember = memberData;
     }
 }

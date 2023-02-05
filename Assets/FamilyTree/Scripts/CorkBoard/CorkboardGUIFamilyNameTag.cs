@@ -10,6 +10,10 @@ public class CorkboardGUIFamilyNameTag : CorkboardGUIItem
 
     private CorkboardGUI corkboard;
 
+    public FamilyMemberData familyMember { get; private set; }
+
+    private const string ERROR_FULLNAME = "ERROR_";
+
     private void Start()
     {
         corkboard = CorkboardGUI.FetchActiveCorkboard();
@@ -17,7 +21,17 @@ public class CorkboardGUIFamilyNameTag : CorkboardGUIItem
 
     public void Setup(FamilyMemberData memberData)
     {
-        nameText.text = memberData.fullName;
+        if (string.IsNullOrWhiteSpace(memberData.fullName))
+        {
+            Debug.LogErrorFormat("Missing name for family member data: {0}", memberData.name);
+            nameText.text = ERROR_FULLNAME + memberData.name;
+        }
+        else
+        {
+            nameText.text = memberData.fullName;
+        }
+
+        familyMember = memberData;
     }
 
     public void CheckToAttach()
