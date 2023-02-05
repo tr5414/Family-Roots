@@ -312,6 +312,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pinPoint: {fileID: 1602533034}
   nametagPoint: {fileID: 0}
+  meshRenderer: {fileID: 0}
 --- !u!1 &359681377
 GameObject:
   m_ObjectHideFlags: 0
@@ -1459,6 +1460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pinPoint: {fileID: 2005767963}
   nametagPoint: {fileID: 0}
+  meshRenderer: {fileID: 0}
 --- !u!65 &1398948819
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1793,6 +1795,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pinPoint: {fileID: 1970636371}
   nametagPoint: {fileID: 0}
+  meshRenderer: {fileID: 0}
 --- !u!4 &1671658110 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8718778828885884488, guid: e5f4daf24146ee040b5a2d7a73b30aa0,
@@ -1848,6 +1851,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pinPoint: {fileID: 863444847}
   nametagPoint: {fileID: 0}
+  meshRenderer: {fileID: 0}
 --- !u!65 &1696492807
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3358,6 +3362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pinPoint: {fileID: 1505076150}
   nametagPoint: {fileID: 0}
+  meshRenderer: {fileID: 0}
 --- !u!1001 &2429894786240162664
 PrefabInstance:
   m_ObjectHideFlags: 0

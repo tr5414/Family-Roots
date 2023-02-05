@@ -22,15 +22,18 @@ public class CorkboardGUI : MonoBehaviour
         Idle,
         MovingPhoto,
         MakingConnection,
-        BreakingConnection
+        BreakingConnection,
+        MovingNameTag
     }
 
     private BoardState currentState = BoardState.Idle;
 
+    private CorkboardGUIPhoto movingPhoto = null;
+
     [SerializeField] private CorkboardStringConnector moveableConnection;
     [SerializeField] private Transform moveableConnectionChild = null;
 
-    private CorkboardGUIPhoto movingPhoto = null;
+    private CorkboardGUINameTag movingNameTag = null;
 
     private ReticuleCanvas reticule;
 
@@ -132,6 +135,10 @@ public class CorkboardGUI : MonoBehaviour
             {
                 BreakingConnectionsUseToggleCheck(usePrimary, useSecondary);
             }
+            else if (currentState == BoardState.MovingNameTag)
+            {
+                MovingNameTagUseToggleCheck(usePrimary, useSecondary);
+            }
 
             lastUsePrimaryState = starterAssetsInputs.usePrimary;
             lastUseSecondaryState = starterAssetsInputs.useSecondary;
@@ -139,11 +146,15 @@ public class CorkboardGUI : MonoBehaviour
 
         if (currentState == BoardState.MovingPhoto)
         {
-            MovingItemUpdate();
+            MovingPhotoUpdate();
         }
         else if (currentState == BoardState.MakingConnection)
         {
             MakingConnectionUpdate();
+        }
+        else if (currentState == BoardState.MovingNameTag)
+        {
+            MovingNameTagUpdate();
         }
     }
 
@@ -176,6 +187,15 @@ public class CorkboardGUI : MonoBehaviour
                         reticule.SetScissorsMode(true);
                         currentState = BoardState.BreakingConnection;
                         familyNetwork.PrepareForSnips();
+                        return;
+                    }
+
+                    CorkboardGUINameTag hitNameTag;
+                    if (hitNameTag = hitItem as CorkboardGUINameTag)
+                    {
+                        movingNameTag = hitNameTag;
+                        movingNameTag.Detach();
+                        currentState = BoardState.MovingNameTag;
                         return;
                     }
                 }
@@ -266,7 +286,17 @@ public class CorkboardGUI : MonoBehaviour
         }
     }
 
-    private void MovingItemUpdate()
+    private void MovingNameTagUseToggleCheck(bool usePrimary, bool useSecondary)
+    {
+        if (!usePrimary || useSecondary)
+        {
+            currentState = BoardState.Idle;
+            movingNameTag.CheckToAttach();
+            movingNameTag = null;
+        }
+    }
+
+    private void MovingPhotoUpdate()
     {
         RaycastHit[] hits = Physics.RaycastAll(Camera.main.transform.position, Camera.main.transform.forward, raycastRange);
 
@@ -290,6 +320,20 @@ public class CorkboardGUI : MonoBehaviour
             {
                 Vector3 newPosition = hit.point;
                 moveableConnectionChild.position = newPosition;
+            }
+        }
+    }
+
+    private void MovingNameTagUpdate()
+    {
+        RaycastHit[] hits = Physics.RaycastAll(Camera.main.transform.position, Camera.main.transform.forward, raycastRange);
+
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider == corkboardCollider)
+            {
+                Vector3 newPosition = hit.point;
+                movingNameTag.transform.position = newPosition;
             }
         }
     }
