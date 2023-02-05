@@ -1,18 +1,16 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CorkboardGUIPhoto : CorkboardGUIItem
 {
-    public Transform pinpoint;
+    [FormerlySerializedAs("pinpoint")]
+    public Transform pinPoint;
+    public Transform nametagPoint;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public MeshRenderer meshRenderer;
 
-    // Update is called once per frame
-    void Update()
+    public void Setup(FamilyMemberData memberData)
     {
-        
+        meshRenderer.material = memberData.photo;
     }
 }

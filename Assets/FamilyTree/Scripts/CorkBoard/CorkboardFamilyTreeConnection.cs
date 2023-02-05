@@ -102,8 +102,8 @@ public class CorkboardFamilyTreeConnection : MonoBehaviour
             {
                 CorkboardStringConnector childConnector = Instantiate(parentChildTemplate);
                 childConnector.corkboard = corkboard;
-                childConnector.parent = singleParent.pinpoint.transform;
-                childConnector.child = child.pinpoint.transform;
+                childConnector.parent = singleParent.pinPoint.transform;
+                childConnector.child = child.pinPoint.transform;
 
                 spawnedConnectors.Add(childConnector);
             }
@@ -114,8 +114,8 @@ public class CorkboardFamilyTreeConnection : MonoBehaviour
             CorkboardStringConnector spouseConnector = Instantiate(spouseTemplate);
             spouseConnector.corkboard = corkboard;
             CorkboardGUIPhoto[] parentList = Parents.ToArray();
-            spouseConnector.parent = parentList[0].pinpoint.transform;
-            spouseConnector.child = parentList[1].pinpoint.transform;
+            spouseConnector.parent = parentList[0].pinPoint.transform;
+            spouseConnector.child = parentList[1].pinPoint.transform;
 
             spawnedConnectors.Add(spouseConnector);
 
@@ -125,7 +125,7 @@ public class CorkboardFamilyTreeConnection : MonoBehaviour
                 CorkboardStringConnector childConnector = Instantiate(parentChildTemplate);
                 childConnector.corkboard = corkboard;
                 childConnector.parent = spouseConnector.midpointTransform; // Use the midpoint on the spouseconnector to get children from.
-                childConnector.child = child.pinpoint.transform;
+                childConnector.child = child.pinPoint.transform;
 
                 spawnedConnectors.Add(childConnector);
             }

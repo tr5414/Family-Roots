@@ -1,9 +1,9 @@
-public class CorkboardGUINametag : CorkboardGUIItem
+public class CorkboardGUINameTag : CorkboardGUIItem
 {
     public TMPro.TextMeshPro nameText;
 
-    public void Setup(string name)
+    public void Setup(FamilyMemberData memberData)
     {
-        nameText.text = name;
+        nameText.text = memberData.fullName;
     }
 }

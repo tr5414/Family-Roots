@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class CorkboardGUI : MonoBehaviour
 {
-
     [SerializeField] private CorkboardFamilyTreeNetwork familyNetwork;
 
     [SerializeField] private Vector3 preferredRelativeForwardVector = Vector3.forward;
@@ -13,7 +12,7 @@ public class CorkboardGUI : MonoBehaviour
     [SerializeField] private float raycastRange = 10f;
 
     private StarterAssets.StarterAssetsInputs starterAssetsInputs;
-    private HashSet<CorkboardGUIItem> elements = new HashSet<CorkboardGUIItem>();
+    private HashSet<CorkboardGUIItem> allItems = new HashSet<CorkboardGUIItem>();
 
     private bool lastUsePrimaryState = false;
     private bool lastUseSecondaryState = false;
@@ -34,6 +33,22 @@ public class CorkboardGUI : MonoBehaviour
     private CorkboardGUIPhoto movingPhoto = null;
 
     private ReticuleCanvas reticule;
+
+    public static CorkboardGUI FetchActiveCorkboard()
+    {
+        CorkboardGUI corkboard = null;
+
+        GameObject corkboardObj = GameObject.FindGameObjectWithTag("Corkboard");
+        if (corkboardObj)
+            corkboard = corkboardObj.GetComponent<CorkboardGUI>();
+
+        if (!corkboard)
+        {
+            Debug.LogError("No live corkboard could be found for use.");
+        }
+
+        return corkboard;
+    }
 
     void Start()
     {
@@ -61,9 +76,8 @@ public class CorkboardGUI : MonoBehaviour
         moveableConnection.child = moveableConnectionChild;
 
         CorkboardGUIItem[] elmList = GetComponentsInChildren<CorkboardGUIItem>();
-        elements.UnionWith(elmList);
 
-        AttachElementsToBoard();
+        AttachItemsToBoard(elmList);
     }
 
     public Vector3 GetCorkboardForwardVector()
@@ -71,7 +85,7 @@ public class CorkboardGUI : MonoBehaviour
         return transform.rotation * preferredRelativeForwardVector;
     }
 
-    private void AttachElementsToBoard()
+    public void AttachItemsToBoard(IEnumerable<CorkboardGUIItem> items)
     {
         if (corkboardCollider == null)
         {
@@ -79,13 +93,19 @@ public class CorkboardGUI : MonoBehaviour
             return;
         }
 
-        foreach(CorkboardGUIItem elm in elements)
+        // TODO Can we do better with transforms?
+        foreach(CorkboardGUIItem itm in items)
         {
-            Vector3 attachPosition = corkboardCollider.ClosestPoint(elm.transform.position);
+            // Random is too sloppy
+            // itm.transform.position += new Vector3(Random.Range(-1, 1), Random.Range(-0.25f, 0.25f), 0);
 
-            elm.transform.position = attachPosition;
-            elm.transform.forward = GetCorkboardForwardVector();
+            Vector3 attachPosition = corkboardCollider.ClosestPoint(itm.transform.position);
+
+            itm.transform.position = attachPosition;
+            itm.transform.forward = GetCorkboardForwardVector();
         }
+
+        allItems.UnionWith(items);
     }
 
     void Update()
@@ -141,7 +161,7 @@ public class CorkboardGUI : MonoBehaviour
             {
                 CorkboardGUIItem hitItem = hit.collider.GetComponent<CorkboardGUIItem>();
 
-                if (hitItem && elements.Contains(hitItem))
+                if (hitItem && allItems.Contains(hitItem))
                 {
                     CorkboardGUIPhoto hitPhoto;
                     if (hitPhoto = hitItem as CorkboardGUIPhoto)
@@ -168,7 +188,7 @@ public class CorkboardGUI : MonoBehaviour
             {
                 var hitItem = hit.collider.GetComponent<CorkboardGUIPhoto>(); // Only connect photos
 
-                if (hitItem && elements.Contains(hitItem))
+                if (hitItem && allItems.Contains(hitItem))
                 {
                     currentState = BoardState.MakingConnection;
                     moveableConnection.parent = hitItem.transform;
@@ -205,7 +225,7 @@ public class CorkboardGUI : MonoBehaviour
             {
                 var hitItem = hit.collider.GetComponent<CorkboardGUIPhoto>(); // Only connect photos
 
-                if (hitItem && moveableConnection.parent != hitItem.transform && elements.Contains(hitItem))
+                if (hitItem && moveableConnection.parent != hitItem.transform && allItems.Contains(hitItem))
                 {
                     CorkboardGUIPhoto parent = moveableConnection.parent.GetComponent<CorkboardGUIPhoto>();
                     CorkboardGUIPhoto child = hitItem.GetComponent<CorkboardGUIPhoto>();

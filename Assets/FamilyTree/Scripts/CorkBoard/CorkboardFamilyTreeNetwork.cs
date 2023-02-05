@@ -5,9 +5,6 @@ using UnityEngine;
 public class CorkboardFamilyTreeNetwork : MonoBehaviour
 {
     [SerializeField]
-    private List<CorkboardGUIPhoto> allPhotos;
-
-    [SerializeField]
     private CorkboardFamilyTreeConnection templateEmptyConnection;
 
     private List<CorkboardFamilyTreeConnection> activeConnections = new List<CorkboardFamilyTreeConnection>();

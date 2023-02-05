@@ -50,8 +50,7 @@ public class CorkboardStringConnector : MonoBehaviour
 
         if (!corkboard)
         {
-            GameObject corkboardObj = GameObject.FindGameObjectWithTag("Corkboard");
-            corkboard = corkboardObj.GetComponent<CorkboardGUI>();
+            corkboard = CorkboardGUI.FetchActiveCorkboard();
         }
     }
 
