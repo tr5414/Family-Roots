@@ -12,7 +12,7 @@ public class CorkboardGUI : MonoBehaviour
 
     //public float UseTimeout = 0.35f;
 
-    private HashSet<CorkboardGUIElement> elements = new HashSet<CorkboardGUIElement>();
+    private HashSet<CorkboardGUIItem> elements = new HashSet<CorkboardGUIItem>();
 
     private float _useTimeoutDelta = 0f;
 
@@ -27,7 +27,7 @@ public class CorkboardGUI : MonoBehaviour
 
     private BoardState currentState = BoardState.Idle;
 
-    private CorkboardGUIElement movingItem = null;
+    private CorkboardGUIItem movingItem = null;
 
     void Start()
     {
@@ -44,10 +44,15 @@ public class CorkboardGUI : MonoBehaviour
         }
 
 
-        CorkboardGUIElement[] elmList = GetComponentsInChildren<CorkboardGUIElement>();
+        CorkboardGUIItem[] elmList = GetComponentsInChildren<CorkboardGUIItem>();
         elements.UnionWith(elmList);
 
         AttachElementsToBoard();
+    }
+
+    public Vector3 GetCorkboardForwardVector()
+    {
+        return transform.rotation * preferredRelativeForwardVector;
     }
 
     private void AttachElementsToBoard()
@@ -58,7 +63,7 @@ public class CorkboardGUI : MonoBehaviour
             return;
         }
 
-        foreach(CorkboardGUIElement elm in elements)
+        foreach(CorkboardGUIItem elm in elements)
         {
             Vector3 attachPosition = Vector3.positiveInfinity;
             //foreach(Collider collide in corkboardColliders)
@@ -71,7 +76,7 @@ public class CorkboardGUI : MonoBehaviour
 
             elm.transform.position = attachPosition;
 
-            elm.transform.forward = transform.rotation * preferredRelativeForwardVector;
+            elm.transform.forward = GetCorkboardForwardVector();
         }
     }
 
@@ -115,7 +120,7 @@ public class CorkboardGUI : MonoBehaviour
             bool isHit = Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, raycastRange);
             if (isHit)
             {
-                var hitItem = hit.collider.GetComponent<CorkboardGUIElement>();
+                var hitItem = hit.collider.GetComponent<CorkboardGUIItem>();
 
                 if (hitItem && elements.Contains(hitItem))
                 {
