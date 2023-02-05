@@ -9,7 +9,7 @@ public class CorkboardGUIPhoto : CorkboardGUIItem
 
     public MeshRenderer meshRenderer;
 
-    public CorkboardGUINameTag activeNameTag;
+    public CorkboardGUIFamilyNameTag activeNameTag;
 
     public void Setup(FamilyMemberData memberData)
     {

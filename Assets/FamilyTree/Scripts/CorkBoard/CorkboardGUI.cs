@@ -33,7 +33,7 @@ public class CorkboardGUI : MonoBehaviour
     [SerializeField] private CorkboardStringConnector moveableConnection;
     [SerializeField] private Transform moveableConnectionChild = null;
 
-    private CorkboardGUINameTag movingNameTag = null;
+    private CorkboardGUIFamilyNameTag movingNameTag = null;
 
     private ReticuleCanvas reticule;
 
@@ -190,8 +190,8 @@ public class CorkboardGUI : MonoBehaviour
                         return;
                     }
 
-                    CorkboardGUINameTag hitNameTag;
-                    if (hitNameTag = hitItem as CorkboardGUINameTag)
+                    CorkboardGUIFamilyNameTag hitNameTag;
+                    if (hitNameTag = hitItem as CorkboardGUIFamilyNameTag)
                     {
                         movingNameTag = hitNameTag;
                         movingNameTag.Detach();

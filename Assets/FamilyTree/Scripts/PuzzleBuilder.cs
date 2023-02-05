@@ -6,7 +6,7 @@ public class PuzzleBuilder : MonoBehaviour
     public CorkboardGUI corkboard;
 
     public CorkboardGUIPhoto prefabPhoto;
-    public CorkboardGUINameTag prefabNameTag;
+    public CorkboardGUIFamilyNameTag prefabNameTag;
 
     public List<FamilyMemberData> familyMembers;
 
@@ -23,7 +23,7 @@ public class PuzzleBuilder : MonoBehaviour
         // Begin propagating.
         foreach(FamilyMemberData fam in familyMembers)
         {
-            CorkboardGUINameTag nameTag = Instantiate(prefabNameTag, corkboard.transform);
+            CorkboardGUIFamilyNameTag nameTag = Instantiate(prefabNameTag, corkboard.transform);
             nameTag.Setup(fam);
             newItems.Add(nameTag);
 
