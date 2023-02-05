@@ -13,13 +13,24 @@ public class CorkboardStringConnector : MonoBehaviour
     public Transform parent;
     public Transform child;
 
+    public Transform midpointTransform;
+
     public bool hasArrow;
     public float arrowPointOffset = 0.05f;
     public float arrowSize = 0.1f;
     public float arrowAngleDegrees = 130;
 
-
+    private MeshCollider meshCollider;
     private LineRenderer line;
+
+    private void Awake()
+    {
+        GameObject newMidPoint = new GameObject("Midpoint");
+        newMidPoint.transform.parent = transform;
+        midpointTransform = newMidPoint.transform;
+
+        transform.position = Vector3.zero; //this must be at 0,0,0 because of mesh generation
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -27,22 +38,24 @@ public class CorkboardStringConnector : MonoBehaviour
         line = GetComponent<LineRenderer>();
         line.enabled = false;
 
+        meshCollider = GetComponent<MeshCollider>();
+        if (meshCollider == null)
+        {
+            meshCollider = gameObject.AddComponent<MeshCollider>();
+        }
+        meshCollider.enabled = false;
+
         if (!corkboard)
         {
             GameObject corkboardObj = GameObject.FindGameObjectWithTag("Corkboard");
             corkboard = corkboardObj.GetComponent<CorkboardGUI>();
         }
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 midpoint = (child.position + parent.position) / 2;
-        transform.position = midpoint; // Put me at the midpoint, so connections can be made off me.
-
         BuildRope();
-
     }
 
     void BuildRope()
@@ -55,6 +68,7 @@ public class CorkboardStringConnector : MonoBehaviour
         line.positionCount = positions;
 
         Vector3 midpoint = (child.position + parent.position) / 2;
+        midpointTransform.position = midpoint;
 
         line.SetPosition(0, parent.position);
         line.SetPosition(1, midpoint);
@@ -78,5 +92,28 @@ public class CorkboardStringConnector : MonoBehaviour
         }
 
         line.enabled = true;
+    }
+
+    public void SetUpForSnip()
+    {
+        GenerateMeshForCollider();
+    }
+
+    private void GenerateMeshForCollider()
+    {
+        Mesh mesh = new Mesh();
+        line.BakeMesh(mesh, true);
+
+        meshCollider.sharedMesh = mesh;
+        meshCollider.enabled = true;
+    }
+
+    public void WindDownCollision()
+    {
+        if (meshCollider)
+        {
+            meshCollider.sharedMesh = null;
+            meshCollider.enabled = false;
+        }
     }
 }

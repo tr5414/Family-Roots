@@ -21,17 +21,19 @@ public class CorkboardGUI : MonoBehaviour
     enum BoardState
     {
         Idle,
-        MovingItem,
-        MakingConnection
+        MovingPhoto,
+        MakingConnection,
+        BreakingConnection
     }
 
     private BoardState currentState = BoardState.Idle;
 
     [SerializeField] private CorkboardStringConnector moveableConnection;
-
     [SerializeField] private Transform moveableConnectionChild = null;
 
-    private CorkboardGUIItem movingItem = null;
+    private CorkboardGUIPhoto movingPhoto = null;
+
+    private ReticuleCanvas reticule;
 
     void Start()
     {
@@ -51,6 +53,8 @@ public class CorkboardGUI : MonoBehaviour
         {
             Debug.LogError("Missing family network. Cannot make connections.");
         }
+
+        reticule = FindObjectOfType<ReticuleCanvas>();
 
         moveableConnection.corkboard = this;
         moveableConnection.gameObject.SetActive(false);
@@ -77,13 +81,7 @@ public class CorkboardGUI : MonoBehaviour
 
         foreach(CorkboardGUIItem elm in elements)
         {
-            Vector3 attachPosition = Vector3.positiveInfinity;
-            {
-                Vector3 testAttachPosition = corkboardCollider.ClosestPoint(elm.transform.position);
-
-                if (attachPosition.sqrMagnitude > testAttachPosition.sqrMagnitude)
-                    attachPosition = testAttachPosition;
-            }
+            Vector3 attachPosition = corkboardCollider.ClosestPoint(elm.transform.position);
 
             elm.transform.position = attachPosition;
             elm.transform.forward = GetCorkboardForwardVector();
@@ -102,7 +100,7 @@ public class CorkboardGUI : MonoBehaviour
             {
                 IdleUseToggleCheck(usePrimary, useSecondary);
             }
-            else if (currentState == BoardState.MovingItem)
+            else if (currentState == BoardState.MovingPhoto)
             {
                 MovingItemUseToggleCheck(usePrimary, useSecondary);
             }
@@ -110,12 +108,16 @@ public class CorkboardGUI : MonoBehaviour
             {
                 MakingConnectionUseToggleCheck(usePrimary, useSecondary);
             }
+            else if (currentState == BoardState.BreakingConnection)
+            {
+                BreakingConnectionsUseToggleCheck(usePrimary, useSecondary);
+            }
 
             lastUsePrimaryState = starterAssetsInputs.usePrimary;
             lastUseSecondaryState = starterAssetsInputs.useSecondary;
         }
 
-        if (currentState == BoardState.MovingItem)
+        if (currentState == BoardState.MovingPhoto)
         {
             MovingItemUpdate();
         }
@@ -137,12 +139,25 @@ public class CorkboardGUI : MonoBehaviour
             bool isHit = Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, raycastRange);
             if (isHit)
             {
-                var hitItem = hit.collider.GetComponent<CorkboardGUIItem>();
+                CorkboardGUIItem hitItem = hit.collider.GetComponent<CorkboardGUIItem>();
 
                 if (hitItem && elements.Contains(hitItem))
                 {
-                    movingItem = hitItem;
-                    currentState = BoardState.MovingItem;
+                    CorkboardGUIPhoto hitPhoto;
+                    if (hitPhoto = hitItem as CorkboardGUIPhoto)
+                    {
+                        movingPhoto = hitPhoto;
+                        currentState = BoardState.MovingPhoto;
+                        return;
+                    }
+
+                    if (hitItem as CorkboardGUIScissors)
+                    {
+                        reticule.SetScissorsMode(true);
+                        currentState = BoardState.BreakingConnection;
+                        familyNetwork.PrepareForSnips();
+                        return;
+                    }
                 }
             }
         }
@@ -169,7 +184,7 @@ public class CorkboardGUI : MonoBehaviour
         if (!usePrimary)
         {
             currentState = BoardState.Idle;
-            movingItem = null;
+            movingPhoto = null;
         }
     }
 
@@ -203,6 +218,34 @@ public class CorkboardGUI : MonoBehaviour
         }
     }
 
+    private void BreakingConnectionsUseToggleCheck(bool usePrimary, bool useSecondary)
+    {
+        if (useSecondary)
+        {
+            currentState = BoardState.Idle;
+            reticule.SetScissorsMode(false);
+            familyNetwork.WindDownSnips();
+        }
+        else if (usePrimary)
+        {
+            RaycastHit[] hits = Physics.RaycastAll(Camera.main.transform.position, Camera.main.transform.forward, raycastRange);
+
+            foreach (RaycastHit hit in hits)
+            {
+                CorkboardStringConnector stringConn = hit.transform.GetComponent<CorkboardStringConnector>();
+                if (stringConn)
+                {
+                    familyNetwork.BreakConnection(stringConn);
+
+                    currentState = BoardState.Idle;
+                    reticule.SetScissorsMode(false);
+                    familyNetwork.WindDownSnips();
+                    return;
+                }
+            }
+        }
+    }
+
     private void MovingItemUpdate()
     {
         RaycastHit[] hits = Physics.RaycastAll(Camera.main.transform.position, Camera.main.transform.forward, raycastRange);
@@ -212,7 +255,7 @@ public class CorkboardGUI : MonoBehaviour
             if (hit.collider == corkboardCollider)
             {
                 Vector3 newPosition = hit.point;
-                movingItem.transform.position = newPosition;
+                movingPhoto.transform.position = newPosition;
             }
         }
     }

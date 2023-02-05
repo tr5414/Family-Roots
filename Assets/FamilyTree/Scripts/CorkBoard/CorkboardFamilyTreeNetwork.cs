@@ -141,4 +141,46 @@ public class CorkboardFamilyTreeNetwork : MonoBehaviour
 
         return connection;
     }
+
+    public void BreakConnection(CorkboardStringConnector connector)
+    {
+        CorkboardFamilyTreeConnection connection = activeConnections.Where(conn => conn.GetSpawnedConnections().Contains(connector)).FirstOrDefault();
+
+        List<CorkboardGUIPhoto> photos = new List<CorkboardGUIPhoto>();
+        photos.Add(connector.parent.GetComponentInParent<CorkboardGUIPhoto>());
+        photos.Add(connector.child.GetComponentInParent<CorkboardGUIPhoto>());
+
+        photos.RemoveAll(p => p == null);
+        
+        if (connection.Parents.IsSupersetOf(photos)) // Oops all parents
+        {
+            connection.TryRemoveChildren();
+        }
+        else
+        {
+            foreach (CorkboardGUIPhoto photo in photos)
+            {
+                connection.TryRemoveChild(photo);
+            }
+        }
+    }
+
+
+    public void PrepareForSnips()
+    {
+        foreach (CorkboardFamilyTreeConnection connection in activeConnections)
+        {
+            foreach (var strings in connection.GetSpawnedConnections())
+                strings.SetUpForSnip();
+        }
+    }
+
+    public void WindDownSnips()
+    {
+        foreach (CorkboardFamilyTreeConnection connection in activeConnections)
+        {
+            foreach (var strings in connection.GetSpawnedConnections())
+                strings.WindDownCollision();
+        }
+    }
 }

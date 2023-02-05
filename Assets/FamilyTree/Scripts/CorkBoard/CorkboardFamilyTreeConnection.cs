@@ -14,7 +14,7 @@ public class CorkboardFamilyTreeConnection : MonoBehaviour
     public CorkboardStringConnector parentChildTemplate;
     public CorkboardStringConnector spouseTemplate;
 
-    private List<CorkboardStringConnector> spawnedConnections = new List<CorkboardStringConnector>();
+    private List<CorkboardStringConnector> spawnedConnectors = new List<CorkboardStringConnector>();
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +41,16 @@ public class CorkboardFamilyTreeConnection : MonoBehaviour
         if (removed)
             UpdateRelationship();
         return removed;
+    }
+
+    public bool TryRemoveChildren()
+    {
+        if (Children.Count == 0)
+            return false;
+
+        Children.Clear();
+        UpdateRelationship();
+        return true;
     }
 
     public bool TryAddChild(CorkboardGUIPhoto child)
@@ -95,7 +105,7 @@ public class CorkboardFamilyTreeConnection : MonoBehaviour
                 childConnector.parent = singleParent.pinpoint.transform;
                 childConnector.child = child.pinpoint.transform;
 
-                spawnedConnections.Add(childConnector);
+                spawnedConnectors.Add(childConnector);
             }
         }
 
@@ -107,30 +117,35 @@ public class CorkboardFamilyTreeConnection : MonoBehaviour
             spouseConnector.parent = parentList[0].pinpoint.transform;
             spouseConnector.child = parentList[1].pinpoint.transform;
 
-            spawnedConnections.Add(spouseConnector);
+            spawnedConnectors.Add(spouseConnector);
 
             
             foreach (CorkboardGUIPhoto child in Children)
             {
                 CorkboardStringConnector childConnector = Instantiate(parentChildTemplate);
                 childConnector.corkboard = corkboard;
-                childConnector.parent = spouseConnector.transform; // Use the midpoint on the spouseconnector to get children from.
+                childConnector.parent = spouseConnector.midpointTransform; // Use the midpoint on the spouseconnector to get children from.
                 childConnector.child = child.pinpoint.transform;
 
-                spawnedConnections.Add(childConnector);
+                spawnedConnectors.Add(childConnector);
             }
         }
 
     }
 
+    public IEnumerable<CorkboardStringConnector> GetSpawnedConnections()
+    {
+        return spawnedConnectors;
+    }
+
     void DestroyConnections()
     {
-        foreach(var conn in spawnedConnections)
+        foreach(var conn in spawnedConnectors)
         {
             if (conn)
                 Destroy(conn.gameObject);
         }
-        spawnedConnections.Clear();
+        spawnedConnectors.Clear();
     }
 
     private void OnDestroy()
