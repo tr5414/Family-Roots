@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2150561045850909871}
   - component: {fileID: 2150561045850909868}
   - component: {fileID: 2150561045850909869}
-  - component: {fileID: 2150561045850909858}
   m_Layer: 0
   m_Name: NewStringConnector
   m_TagString: Untagged
@@ -52,7 +51,7 @@ LineRenderer:
   m_RenderingLayerMask: 3
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1f9d4d3514b1f44b9bd79b1ad1ac5141, type: 2}
+  - {fileID: 2100000, guid: c6166cdc79c2d435e938ab04292233a3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -146,20 +145,8 @@ MonoBehaviour:
   corkboard: {fileID: 0}
   parent: {fileID: 0}
   child: {fileID: 0}
+  midpointTransform: {fileID: 0}
   hasArrow: 1
   arrowPointOffset: 0.03
   arrowSize: 0.12
   arrowAngleDegrees: 160
---- !u!65 &2150561045850909858
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2150561045850909870}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1.8559856, y: 1.952234, z: 1.9840155}
-  m_Center: {x: 9.197961, y: 1.0410436, z: 11.454266}

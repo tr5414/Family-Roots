@@ -90,25 +90,40 @@ public class CorkboardGUI : MonoBehaviour
 
     public void AttachItemsToBoard(IEnumerable<CorkboardGUIItem> items)
     {
+        // TODO Can we do better with transforms?
+        foreach(CorkboardGUIItem item in items)
+        {
+            AttachItemToBoard(item);
+        }
+    }
+
+    public void AttachItemToBoard(CorkboardGUIItem item)
+    {
         if (corkboardCollider == null)
         {
             Debug.LogError("Unable to find corkboardCollider. Bailing out.");
             return;
         }
 
-        // TODO Can we do better with transforms?
-        foreach(CorkboardGUIItem itm in items)
+        CorkboardGUIPhoto photo;
+        if (photo = item as CorkboardGUIPhoto)
         {
-            // Random is too sloppy
-            // itm.transform.position += new Vector3(Random.Range(-1, 1), Random.Range(-0.25f, 0.25f), 0);
+            familyNetwork.AddFamilyPhoto(photo);
 
-            Vector3 attachPosition = corkboardCollider.ClosestPoint(itm.transform.position);
-
-            itm.transform.position = attachPosition;
-            itm.transform.forward = GetCorkboardForwardVector();
+            // TODO Sort into photos
         }
 
-        allItems.UnionWith(items);
+        // TODO sort name tags
+
+        // Random is too sloppy
+        // itm.transform.position += new Vector3(Random.Range(-1, 1), Random.Range(-0.25f, 0.25f), 0);
+
+        Vector3 attachPosition = corkboardCollider.ClosestPoint(item.transform.position);
+
+        item.transform.position = attachPosition;
+        item.transform.forward = GetCorkboardForwardVector();
+
+        allItems.Add(item);
     }
 
     void Update()
