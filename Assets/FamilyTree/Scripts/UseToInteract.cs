@@ -9,6 +9,9 @@ public class UseToInteract : MonoBehaviour
 
     bool lastUsePrimary;
 
+    [SerializeField]
+    private float raycastRange = 10f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,10 +29,24 @@ public class UseToInteract : MonoBehaviour
         {
             if (starterAssetsInputs.usePrimary)
             {
-                OnUsePrimaryClick.Invoke();
+                RaycastCheck();
             }
         }
 
         lastUsePrimary = starterAssetsInputs.usePrimary;
+    }
+
+    private void RaycastCheck()
+    {
+        bool isHit = Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, raycastRange);
+        if (isHit)
+        {
+            var hitTransform = hit.collider.transform;
+
+            if (hitTransform == transform)
+            {
+                OnUsePrimaryClick.Invoke();
+            }
+        }
     }
 }
