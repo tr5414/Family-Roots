@@ -1,12 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CorkboardFamilyTreeConnection : MonoBehaviour
 {
-    [SerializeField]
-    private List<CorkboardGUIPhoto> parents = new List<CorkboardGUIPhoto>();
-    [SerializeField]
-    private List<CorkboardGUIPhoto> children = new List<CorkboardGUIPhoto>();
+    public HashSet<CorkboardGUIPhoto> Parents { get; private set; } = new HashSet<CorkboardGUIPhoto>();
+
+    public HashSet<CorkboardGUIPhoto> Children { get; private set; } = new HashSet<CorkboardGUIPhoto>();
 
     [SerializeField]
     private CorkboardGUI corkboard;
@@ -21,47 +21,74 @@ public class CorkboardFamilyTreeConnection : MonoBehaviour
     {
         if (corkboard == null)
         {
-            Debug.LogError("Missing corkboard");
+            GameObject corkboardObj = GameObject.FindGameObjectWithTag("Corkboard");
+            if (corkboardObj == null)
+            {
+                Debug.LogError("Missing corkboard");
+            }
+            else
+            {
+                corkboard = corkboardObj.GetComponent<CorkboardGUI>();
+            }
         }
 
         UpdateRelationship();
     }
 
-    /*
+    public bool TryRemoveChild(CorkboardGUIPhoto child)
+    {
+        bool removed = Children.Remove(child);
+        if (removed)
+            UpdateRelationship();
+        return removed;
+    }
+
     public bool TryAddChild(CorkboardGUIPhoto child)
     {
-
-    }
-
-    public bool TryAddChild(CorkboardGUIPhoto parent)
-    {
-        if (parent1 != null && parent2 != null)
+        if (Children.Contains(child))
         {
-            Debug.LogErrorFormat("Cannot add third parent to connection. Parent={0}", parent);
             return false;
         }
+        Children.Add(child);
+        UpdateRelationship();
+        return true;
     }
-    */
+
+    public bool SetParents(CorkboardGUIPhoto parent1, CorkboardGUIPhoto parent2)
+    {
+        if (Parents.Count != 0)
+        {
+            Debug.LogError("Tried to set parents when parents already set!");
+            return false;
+        }
+
+        Parents.Add(parent1);
+        if (parent2 != null)
+            Parents.Add(parent2);
+
+        UpdateRelationship();
+        return true;
+    }
 
     public void UpdateRelationship()
     {
         DestroyConnections();
 
-        if (parents.Count == 0 || children.Count == 0)
+        if (Parents.Count == 0 || Children.Count == 0)
         {
             return;
         }
 
-        if (parents.Count > 2)
+        if (Parents.Count > 2)
         {
             Debug.LogErrorFormat("{0} connection has three parents. Error?!", name);
         }
 
         // Single parent direct connects all children.
-        if (parents.Count == 1)
+        if (Parents.Count == 1)
         {
-            CorkboardGUIPhoto singleParent = parents[0];
-            foreach (CorkboardGUIPhoto child in children)
+            CorkboardGUIPhoto singleParent = Parents.First();
+            foreach (CorkboardGUIPhoto child in Children)
             {
                 CorkboardStringConnector childConnector = Instantiate(parentChildTemplate);
                 childConnector.corkboard = corkboard;
@@ -72,17 +99,19 @@ public class CorkboardFamilyTreeConnection : MonoBehaviour
             }
         }
 
-        else if (parents.Count == 2)
+        else if (Parents.Count == 2)
         {
             CorkboardStringConnector spouseConnector = Instantiate(spouseTemplate);
             spouseConnector.corkboard = corkboard;
-            spouseConnector.parent = parents[0].pinpoint.transform;
-            spouseConnector.child = parents[1].pinpoint.transform;
+            IEnumerator<CorkboardGUIPhoto> parentList = Parents.GetEnumerator();
+            spouseConnector.parent = parentList.Current.pinpoint.transform;
+            parentList.MoveNext();
+            spouseConnector.child = parentList.Current.pinpoint.transform;
 
             spawnedConnections.Add(spouseConnector);
 
             
-            foreach (CorkboardGUIPhoto child in children)
+            foreach (CorkboardGUIPhoto child in Children)
             {
                 CorkboardStringConnector childConnector = Instantiate(parentChildTemplate);
                 childConnector.corkboard = corkboard;

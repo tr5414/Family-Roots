@@ -3,18 +3,17 @@ using UnityEngine;
 
 public class CorkboardGUI : MonoBehaviour
 {
-    [SerializeField] private StarterAssets.StarterAssetsInputs starterAssetsInputs;
+
+    [SerializeField] private CorkboardFamilyTreeNetwork familyNetwork;
+
     [SerializeField] private Vector3 preferredRelativeForwardVector = Vector3.forward;
 
     [SerializeField] private Collider corkboardCollider;
 
     [SerializeField] private float raycastRange = 10f;
 
-    //public float UseTimeout = 0.35f;
-
+    private StarterAssets.StarterAssetsInputs starterAssetsInputs;
     private HashSet<CorkboardGUIItem> elements = new HashSet<CorkboardGUIItem>();
-
-    private float _useTimeoutDelta = 0f;
 
     private bool lastUsePrimaryState = false;
     private bool lastUseSecondaryState = false;
@@ -22,10 +21,15 @@ public class CorkboardGUI : MonoBehaviour
     enum BoardState
     {
         Idle,
-        MovingItem
+        MovingItem,
+        MakingConnection
     }
 
     private BoardState currentState = BoardState.Idle;
+
+    [SerializeField] private CorkboardStringConnector moveableConnection;
+
+    [SerializeField] private Transform moveableConnectionChild = null;
 
     private CorkboardGUIItem movingItem = null;
 
@@ -43,6 +47,14 @@ public class CorkboardGUI : MonoBehaviour
             corkboardCollider = GetComponent<Collider>();
         }
 
+        if (familyNetwork == null)
+        {
+            Debug.LogError("Missing family network. Cannot make connections.");
+        }
+
+        moveableConnection.corkboard = this;
+        moveableConnection.gameObject.SetActive(false);
+        moveableConnection.child = moveableConnectionChild;
 
         CorkboardGUIItem[] elmList = GetComponentsInChildren<CorkboardGUIItem>();
         elements.UnionWith(elmList);
@@ -66,7 +78,6 @@ public class CorkboardGUI : MonoBehaviour
         foreach(CorkboardGUIItem elm in elements)
         {
             Vector3 attachPosition = Vector3.positiveInfinity;
-            //foreach(Collider collide in corkboardColliders)
             {
                 Vector3 testAttachPosition = corkboardCollider.ClosestPoint(elm.transform.position);
 
@@ -75,7 +86,6 @@ public class CorkboardGUI : MonoBehaviour
             }
 
             elm.transform.position = attachPosition;
-
             elm.transform.forward = GetCorkboardForwardVector();
         }
     }
@@ -92,10 +102,13 @@ public class CorkboardGUI : MonoBehaviour
             {
                 IdleUseToggleCheck(usePrimary, useSecondary);
             }
-
-            if (currentState == BoardState.MovingItem)
+            else if (currentState == BoardState.MovingItem)
             {
                 MovingItemUseToggleCheck(usePrimary, useSecondary);
+            }
+            else if (currentState == BoardState.MakingConnection)
+            {
+                MakingConnectionUseToggleCheck(usePrimary, useSecondary);
             }
 
             lastUsePrimaryState = starterAssetsInputs.usePrimary;
@@ -105,6 +118,10 @@ public class CorkboardGUI : MonoBehaviour
         if (currentState == BoardState.MovingItem)
         {
             MovingItemUpdate();
+        }
+        else if (currentState == BoardState.MakingConnection)
+        {
+            MakingConnectionUpdate();
         }
     }
 
@@ -129,6 +146,22 @@ public class CorkboardGUI : MonoBehaviour
                 }
             }
         }
+        else if (useSecondary)
+        {
+            bool isHit = Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, raycastRange);
+            if (isHit)
+            {
+                var hitItem = hit.collider.GetComponent<CorkboardGUIPhoto>(); // Only connect photos
+
+                if (hitItem && elements.Contains(hitItem))
+                {
+                    currentState = BoardState.MakingConnection;
+                    moveableConnection.parent = hitItem.transform;
+                    moveableConnection.gameObject.SetActive(true);
+                    moveableConnectionChild.position = hit.point;
+                }
+            }
+        }
     }
 
     private void MovingItemUseToggleCheck(bool usePrimary, bool useSecondary)
@@ -137,6 +170,36 @@ public class CorkboardGUI : MonoBehaviour
         {
             currentState = BoardState.Idle;
             movingItem = null;
+        }
+    }
+
+    private void MakingConnectionUseToggleCheck(bool usePrimary, bool useSecondary)
+    {
+        if (usePrimary)
+        {
+            currentState = BoardState.Idle;
+            moveableConnection.gameObject.SetActive(false);
+            return;
+        }
+
+        if (!useSecondary)
+        {
+            RaycastHit[] hits = Physics.RaycastAll(Camera.main.transform.position, Camera.main.transform.forward, raycastRange);
+
+            foreach (RaycastHit hit in hits)
+            {
+                var hitItem = hit.collider.GetComponent<CorkboardGUIPhoto>(); // Only connect photos
+
+                if (hitItem && moveableConnection.parent != hitItem.transform && elements.Contains(hitItem))
+                {
+                    CorkboardGUIPhoto parent = moveableConnection.parent.GetComponent<CorkboardGUIPhoto>();
+                    CorkboardGUIPhoto child = hitItem.GetComponent<CorkboardGUIPhoto>();
+                    familyNetwork.MakeConnection(parent, child);
+                }
+            }
+
+            currentState = BoardState.Idle;
+            moveableConnection.gameObject.SetActive(false);
         }
     }
 
@@ -150,6 +213,20 @@ public class CorkboardGUI : MonoBehaviour
             {
                 Vector3 newPosition = hit.point;
                 movingItem.transform.position = newPosition;
+            }
+        }
+    }
+
+    private void MakingConnectionUpdate()
+    {
+        RaycastHit[] hits = Physics.RaycastAll(Camera.main.transform.position, Camera.main.transform.forward, raycastRange);
+
+        foreach (RaycastHit hit in hits)
+        {
+            if (hit.collider == corkboardCollider)
+            {
+                Vector3 newPosition = hit.point;
+                moveableConnectionChild.position = newPosition;
             }
         }
     }

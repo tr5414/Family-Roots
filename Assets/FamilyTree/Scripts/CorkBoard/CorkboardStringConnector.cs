@@ -26,6 +26,12 @@ public class CorkboardStringConnector : MonoBehaviour
     {
         line = GetComponent<LineRenderer>();
 
+        if (!corkboard)
+        {
+            GameObject corkboardObj = GameObject.FindGameObjectWithTag("Corkboard");
+            corkboard = corkboardObj.GetComponent<CorkboardGUI>();
+        }
+
     }
 
     // Update is called once per frame
