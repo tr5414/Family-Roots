@@ -128,7 +128,7 @@ LineRenderer:
     alignment: 0
     textureMode: 1
     shadowBias: 0
-    generateLightingData: 0
+    generateLightingData: 1
   m_UseWorldSpace: 1
   m_Loop: 0
 --- !u!114 &2150561045850909869
