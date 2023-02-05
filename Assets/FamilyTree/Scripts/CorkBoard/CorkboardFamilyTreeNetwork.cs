@@ -55,14 +55,14 @@ public class CorkboardFamilyTreeNetwork : MonoBehaviour
 
             if (existingDualParentConnection)
             {
-                existingDualParentConnection.TryAddChild(child);
                 existingChildConnection.TryRemoveChild(child);
+                existingDualParentConnection.TryAddChild(child);
             }
             else
             {
+                existingChildConnection.TryRemoveChild(child);
                 CorkboardFamilyTreeConnection connect = CreateNewConnection(parent, parent2);
                 connect.TryAddChild(child);
-                existingChildConnection.TryRemoveChild(child);
             }
         }
     }

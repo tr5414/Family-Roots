@@ -103,10 +103,9 @@ public class CorkboardFamilyTreeConnection : MonoBehaviour
         {
             CorkboardStringConnector spouseConnector = Instantiate(spouseTemplate);
             spouseConnector.corkboard = corkboard;
-            IEnumerator<CorkboardGUIPhoto> parentList = Parents.GetEnumerator();
-            spouseConnector.parent = parentList.Current.pinpoint.transform;
-            parentList.MoveNext();
-            spouseConnector.child = parentList.Current.pinpoint.transform;
+            CorkboardGUIPhoto[] parentList = Parents.ToArray();
+            spouseConnector.parent = parentList[0].pinpoint.transform;
+            spouseConnector.child = parentList[1].pinpoint.transform;
 
             spawnedConnections.Add(spouseConnector);
 

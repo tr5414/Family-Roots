@@ -25,6 +25,7 @@ public class CorkboardStringConnector : MonoBehaviour
     void Start()
     {
         line = GetComponent<LineRenderer>();
+        line.enabled = false;
 
         if (!corkboard)
         {
@@ -37,6 +38,9 @@ public class CorkboardStringConnector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector3 midpoint = (child.position + parent.position) / 2;
+        transform.position = midpoint; // Put me at the midpoint, so connections can be made off me.
+
         BuildRope();
 
     }
@@ -51,7 +55,6 @@ public class CorkboardStringConnector : MonoBehaviour
         line.positionCount = positions;
 
         Vector3 midpoint = (child.position + parent.position) / 2;
-        transform.position = midpoint; // Put me at the midpoint, so connections can be made off me.
 
         line.SetPosition(0, parent.position);
         line.SetPosition(1, midpoint);
@@ -73,10 +76,7 @@ public class CorkboardStringConnector : MonoBehaviour
             line.SetPosition(5, child.position + arrowRightVector - arrowPointOffset*stringForwardVector);
             line.SetPosition(6, child.position - arrowPointOffset * stringForwardVector);
         }
-    }
 
-    private Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
-    {
-        return Quaternion.Euler(angles) * (point - pivot) + pivot;
+        line.enabled = true;
     }
 }
