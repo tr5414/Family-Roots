@@ -1,16 +1,22 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+
 
 public abstract class Interactable : MonoBehaviour
 {
-    private Renderer render;
-    private Material regMaterial;
-    public Material HighlightMaterial;
+    //private Renderer[] renders;
+    //private Material[] regMaterial;
+    //public Material HighlightMaterial;
 
     public void Awake()
     {
-        render = GetComponent<Renderer>();
-        regMaterial = render.material;
-
+        //renders = GetComponentsInChildren<Renderer>();
+        //regMaterial = new Material[renders.Length];
+        //for (int i = 0; i < renders.Length; i++)
+        //{
+        //    regMaterial[i] = renders[i].material;
+        //}
     }
     public virtual void Interact()
     {
@@ -19,14 +25,16 @@ public abstract class Interactable : MonoBehaviour
 
     public void BeingLookedAt()
     {
-        ChangeMaterial(HighlightMaterial);
+        //for (int i = 0; i < renders.Length; i++)
+        //{
+        //    renders[i].material = HighlightMaterial;
+        //}
     }
     public void NotBeingLookedAt()
     {
-        ChangeMaterial(regMaterial);
-    }
-    public void ChangeMaterial(Material mat)
-    {
-        render.material = mat;
+        //for (int i = 0; i < renders.Length; i++)
+        //{
+        //    renders[i].material = HighlightMaterial;
+        //}
     }
 }

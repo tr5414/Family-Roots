@@ -55,6 +55,11 @@ namespace StarterAssets
 		{
 			UseSecondaryInput(value.isPressed);
 		}
+
+		public void OnPause(InputValue value)
+		{
+			PauseInput(value.isPressed);
+		}
 #endif
 
 
@@ -86,6 +91,10 @@ namespace StarterAssets
 		public void UseSecondaryInput(bool newUseState)
 		{
 			useSecondary = newUseState;
+		}
+		public void PauseInput(bool newPauseState)
+		{
+			PauseMenu.Instance?.Show();
 		}
 
 		private void OnApplicationFocus(bool hasFocus)
