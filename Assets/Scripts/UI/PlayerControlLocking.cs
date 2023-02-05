@@ -28,8 +28,15 @@ public class PlayerControlLocking : MonoBehaviour
     private void Set(bool locked)
     {
         Cursor.lockState = locked ? CursorLockMode.None : CursorLockMode.Locked;
-        FindObjectOfType<StarterAssetsInputs>().cursorLocked = !locked;
-        FindObjectOfType<FirstPersonController>().enabled = !locked;
-
+        var starterAssetsInputs = FindObjectOfType<StarterAssetsInputs>();
+        if (starterAssetsInputs != null)
+        {
+            starterAssetsInputs.cursorLocked = !locked;
+        }
+        var firstPersonController = FindObjectOfType<FirstPersonController>();
+        if (firstPersonController != null)
+        {
+            firstPersonController.enabled = !locked;
+        }
     }
 }
