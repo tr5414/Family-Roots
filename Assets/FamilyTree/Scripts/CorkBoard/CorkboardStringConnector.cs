@@ -23,6 +23,9 @@ public class CorkboardStringConnector : MonoBehaviour
     private MeshCollider meshCollider;
     private LineRenderer line;
 
+    private Vector3 lastParentPos;
+    private Vector3 lastChildPos;
+
     private void Awake()
     {
         GameObject newMidPoint = new GameObject("Midpoint");
@@ -55,7 +58,13 @@ public class CorkboardStringConnector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        BuildRope();
+        if (parent.position != lastParentPos || child.position != lastChildPos)
+        {
+            BuildRope();
+        }
+
+        lastParentPos = parent.position;
+        lastChildPos = child.position;
     }
 
     void BuildRope()
