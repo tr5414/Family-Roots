@@ -8,6 +8,8 @@ public class PlayerControlLocking : MonoBehaviour
 
     private HashSet<object> lockingObjects = new HashSet<object>();
 
+    public bool Locked => lockingObjects.Count > 0;
+
     public void Lock(object key)
     {
         lockingObjects.Add(key);
