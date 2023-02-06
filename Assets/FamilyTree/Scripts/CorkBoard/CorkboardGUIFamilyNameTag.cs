@@ -14,6 +14,9 @@ public class CorkboardGUIFamilyNameTag : CorkboardGUIItem
 
     private const string ERROR_FULLNAME = "ERROR_";
 
+    public AudioSource audioOnPickup;
+    public AudioSource audioOnPlace;
+
     private void Start()
     {
         corkboard = CorkboardGUI.FetchActiveCorkboard();
@@ -42,6 +45,7 @@ public class CorkboardGUIFamilyNameTag : CorkboardGUIItem
             attachedToPhoto.activeNameTag = this;
             transform.position = attachedToPhoto.nametagPoint.position;
             transform.parent = attachedToPhoto.transform;
+            audioOnPlace?.Play();
         }
     }
 
@@ -53,6 +57,7 @@ public class CorkboardGUIFamilyNameTag : CorkboardGUIItem
             attachedToPhoto = null;
         }
         transform.parent = corkboard.transform;
+        audioOnPickup?.Play();
     }
 
     private void OnCollisionEnter(Collision collision)
