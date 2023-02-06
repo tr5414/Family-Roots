@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ExitDoorUI : MonoBehaviour
@@ -13,10 +14,13 @@ public class ExitDoorUI : MonoBehaviour
     public GameObject fadeOutContainer;
 
     public GameObject resultsContainer;
+    public ResultsScreenPrompt resultsScreen;
 
     private StarterAssets.StarterAssetsInputs starterAssetsInputs;
 
     private PlayerControlLocking controlLock;
+
+    private bool isMidPrompt = false;
 
     void Awake()
     {
@@ -30,22 +34,40 @@ public class ExitDoorUI : MonoBehaviour
             starterAssetsInputs = playerObj.GetComponent<StarterAssets.StarterAssetsInputs>();
         }
 
-        exitQuestionCancelButton.onClick.AddListener(Hide);
         controlLock = FindObjectOfType<PlayerControlLocking>();
+
+        exitQuestionCancelButton.onClick.AddListener(Hide);
+        exitQuestionConfirmButton.onClick.AddListener(PromptWithResults);
     }
     public void PromptWithQuestion()
     {
+        if (isMidPrompt)
+            return;
+
         exitQuestionContainer.SetActive(true);
         fadeOutContainer.SetActive(false);
         resultsContainer.SetActive(false);
 
         controlLock.Lock(this);
         canvasObject.gameObject.SetActive(true);
+
+        isMidPrompt = true;
     }
 
     public void PromptWithResults()
     {
-        // TODO
+        //if (isMidPrompt)
+        //    return;
+
+        resultsScreen.EvaluateResults();
+        exitQuestionContainer.SetActive(false);
+        fadeOutContainer.SetActive(true);
+        resultsContainer.SetActive(true);
+
+        //controlLock.Lock(this);
+        canvasObject.gameObject.SetActive(true);
+
+        isMidPrompt = true;
     }
 
     public void Hide()
@@ -56,10 +78,7 @@ public class ExitDoorUI : MonoBehaviour
 
         controlLock.Unlock(this);
         canvasObject.gameObject.SetActive(false);
-    }
 
-    private void EvaluateResults()
-    {
-        // TODO
+        isMidPrompt = false;
     }
 }
