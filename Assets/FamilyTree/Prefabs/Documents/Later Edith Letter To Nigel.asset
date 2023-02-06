@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ba66e06d2e618348905ce03db444c11, type: 3}
+  m_Name: Later Edith Letter To Nigel
+  m_EditorClassIdentifier: 
+  closeupEvidencePrefab: {fileID: 0}
+  thumbnailImage: {fileID: 0}
+  front:
+    image: {fileID: 2800000, guid: 84515c483fd94ae45a730fc34d9bccec, type: 3}
+    material: {fileID: 0}
+  back:
+    image: {fileID: 2800000, guid: 0df0d59786f8b8649ad2682ba93c4fe5, type: 3}
+    material: {fileID: 0}

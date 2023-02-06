@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &1499886680187097841
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 529548070426135425, guid: e0c8f3ac8749a894889c60546c539bc9,
+        type: 3}
+      propertyPath: evidence
+      value: 
+      objectReference: {fileID: 11400000, guid: dad40fb7578c30545928adcd4cb893c9,
+        type: 2}
+    - target: {fileID: 2298927915099555363, guid: e0c8f3ac8749a894889c60546c539bc9,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298927915099555363, guid: e0c8f3ac8749a894889c60546c539bc9,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298927915099555363, guid: e0c8f3ac8749a894889c60546c539bc9,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298927915099555363, guid: e0c8f3ac8749a894889c60546c539bc9,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298927915099555363, guid: e0c8f3ac8749a894889c60546c539bc9,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298927915099555363, guid: e0c8f3ac8749a894889c60546c539bc9,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298927915099555363, guid: e0c8f3ac8749a894889c60546c539bc9,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298927915099555363, guid: e0c8f3ac8749a894889c60546c539bc9,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298927915099555363, guid: e0c8f3ac8749a894889c60546c539bc9,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298927915099555363, guid: e0c8f3ac8749a894889c60546c539bc9,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2298927915099555363, guid: e0c8f3ac8749a894889c60546c539bc9,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7512846506997386778, guid: e0c8f3ac8749a894889c60546c539bc9,
+        type: 3}
+      propertyPath: m_Name
+      value: Letter From Jolene To Nigel
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e0c8f3ac8749a894889c60546c539bc9, type: 3}
